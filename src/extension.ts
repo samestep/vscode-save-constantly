@@ -16,7 +16,7 @@ export const activate = (context: vscode.ExtensionContext) => {
       return;
     }
     await vscode.commands.executeCommand(
-      "workbench.action.files.saveWithoutFormatting"
+      "workbench.action.files.saveWithoutFormatting",
     );
   };
 
@@ -61,6 +61,6 @@ export const activate = (context: vscode.ExtensionContext) => {
     }),
 
     statusBarItem,
-    vscode.window.onDidChangeActiveTextEditor(updateStatusBar)
+    vscode.window.onDidChangeActiveTextEditor(updateStatusBar),
   );
 };
