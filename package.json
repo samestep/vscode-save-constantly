@@ -1,0 +1,41 @@
+{
+  "private": true,
+  "publisher": "samestep",
+  "name": "save-constantly",
+  "version": "0.1.0",
+  "displayName": "Save Constantly",
+  "description": "Toggle to save on every keystroke.",
+  "engines": {
+    "vscode": "^1.75.0"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/samestep/vscode-save-constantly"
+  },
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "saveConstantly.toggle",
+        "title": "Save Constantly: Toggle"
+      }
+    ],
+    "keybindings": [
+      {
+        "key": "alt+s",
+        "command": "saveConstantly.toggle"
+      }
+    ]
+  },
+  "devDependencies": {
+    "@types/vscode": "^1",
+    "@vscode/vsce": "^3",
+    "esbuild": "^0.25"
+  },
+  "scripts": {
+    "js": "esbuild src/extension.ts --bundle --format=cjs --platform=node --external:vscode --outdir=dist",
+    "vsix": "vsce package",
+    "build": "npm run js && npm run vsix"
+  }
+}

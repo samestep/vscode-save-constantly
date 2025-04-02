@@ -1,0 +1,5 @@
+/.direnv/
+/.envrc
+/dist/
+/save-constantly-*.vsix
+node_modules/
