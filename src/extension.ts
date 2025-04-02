@@ -7,17 +7,8 @@ export const activate = (context: vscode.ExtensionContext) => {
   log.info("activating Save Constantly extension");
 
   const save = async (document: vscode.TextDocument) => {
-    const { fileName } = document;
-    log.trace("saving", fileName);
-    const active = vscode.window.activeTextEditor?.document.fileName;
-    if (fileName !== active) {
-      // https://stackoverflow.com/q/79550924/5044950
-      log.warn("can't save a file different from the active document", active);
-      return;
-    }
-    await vscode.commands.executeCommand(
-      "workbench.action.files.saveWithoutFormatting",
-    );
+    log.trace("saving", document.fileName);
+    await document.save({ skipSaveParticipants: true });
   };
 
   const files = new Set<string>();
