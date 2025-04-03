@@ -1,5 +1,12 @@
 import * as vscode from "vscode";
 
+const configsToDisable = [
+  ["editor", "formatOnSave"],
+  ["files", "insertFinalNewline"],
+  ["files", "trimFinalNewlines"],
+  ["files", "trimTrailingWhitespace"],
+];
+
 export const activate = (context: vscode.ExtensionContext) => {
   const log = vscode.window.createOutputChannel("Save Constantly", {
     log: true,
@@ -9,15 +16,40 @@ export const activate = (context: vscode.ExtensionContext) => {
   const save = async (document: vscode.TextDocument) => {
     const { fileName } = document;
     log.trace("saving", fileName);
-    const active = vscode.window.activeTextEditor?.document.fileName;
-    if (fileName !== active) {
-      // https://stackoverflow.com/q/79550924/5044950
-      log.warn("can't save a file different from the active document", active);
-      return;
+    const changes = configsToDisable.map(() => 0);
+    const listener = vscode.workspace.onDidChangeConfiguration((event) => {
+      configsToDisable.forEach(([section, name], index) => {
+        if (event.affectsConfiguration(`${section}.${name}`, document))
+          changes[index] += 1;
+      });
+    });
+    try {
+      const before = await Promise.all(
+        configsToDisable.map(async ([section, name]) => {
+          const config = vscode.workspace.getConfiguration(section, document);
+          const value = config.get<boolean>(name);
+          await config.update(name, false);
+          return value;
+        }),
+      );
+      const saved = await document.save();
+      if (!saved) log.warn("failed to save", fileName);
+      await Promise.all(
+        configsToDisable.map(async ([section, name], index) => {
+          const config = vscode.workspace.getConfiguration(section, document);
+          await config.update(name, before[index]);
+        }),
+      );
+    } finally {
+      listener.dispose();
+      configsToDisable.forEach(([section, name], index) => {
+        const count = changes[index];
+        if (!(count === 0 || count === 2))
+          vscode.window.showWarningMessage(
+            `tried to change temporarily disable ${section}.${name} while saving, but it changed ${count} times instead of the expected 0 or 2`,
+          );
+      });
     }
-    await vscode.commands.executeCommand(
-      "workbench.action.files.saveWithoutFormatting",
-    );
   };
 
   const files = new Set<string>();
