@@ -5,6 +5,7 @@
   "version": "0.1.0",
   "displayName": "Save Constantly",
   "description": "Toggle to save on every keystroke.",
+  "icon": "icon.png",
   "engines": {
     "vscode": "^1.75.0"
   },
@@ -26,12 +27,25 @@
         "key": "alt+s",
         "command": "saveConstantly.toggle"
       }
-    ]
+    ],
+    "configuration": {
+      "properties": {
+        "saveConstantly.saveWithoutFormatting": {
+          "markdownDescription": "By default, this extension does the equivalent of the **File: Save** command. With this setting enabled, it will instead do the equivalent of the **File: Save without Formatting** command. Note that, because of [microsoft/vscode#245405](https://github.com/microsoft/vscode/issues/245405), enabling this setting prevents this extension from saving any file other than that of the active editor.",
+          "type": "boolean",
+          "default": false
+        }
+      }
+    }
   },
   "devDependencies": {
+    "@resvg/resvg-js-cli": "^2.6.2-beta.1",
+    "@types/bun": "^1",
     "@types/vscode": "^1",
     "@vscode/vsce": "^3",
     "esbuild": "^0.25",
+    "preact": "^10",
+    "preact-render-to-string": "^6",
     "prettier": "^3",
     "prettier-plugin-organize-imports": "^4",
     "typescript": "^5"
@@ -40,10 +54,12 @@
     "prettier-check": "prettier --check .",
     "prettier-write": "prettier --write .",
     "typescript": "tsc",
-    "check": "npm run prettier-check && npm run typescript",
+    "check": "bun run prettier-check && bun run typescript",
+    "svg": "bun icon.tsx",
+    "png": "resvg-js --fit-width 256 icon.svg icon.png",
     "js": "esbuild src/extension.ts --bundle --format=cjs --platform=node --external:vscode --outdir=dist",
     "vsix": "vsce package",
-    "build": "npm run js && npm run vsix"
+    "build": "bun run svg && bun run png && bun run js && bun run vsix"
   },
   "prettier": {
     "plugins": [

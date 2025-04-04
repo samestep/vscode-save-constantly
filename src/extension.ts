@@ -9,15 +9,25 @@ export const activate = (context: vscode.ExtensionContext) => {
   const save = async (document: vscode.TextDocument) => {
     const { fileName } = document;
     log.trace("saving", fileName);
-    const active = vscode.window.activeTextEditor?.document.fileName;
-    if (fileName !== active) {
-      // https://stackoverflow.com/q/79550924/5044950
-      log.warn("can't save a file different from the active document", active);
-      return;
+    if (
+      vscode.workspace
+        .getConfiguration("saveConstantly")
+        .get("saveWithoutFormatting")
+    ) {
+      const active = vscode.window.activeTextEditor?.document.fileName;
+      if (fileName !== active) {
+        log.warn(
+          "can't save a file different from the active document",
+          active,
+        );
+        return;
+      }
+      await vscode.commands.executeCommand(
+        "workbench.action.files.saveWithoutFormatting",
+      );
+    } else {
+      if (!(await document.save())) log.warn("failed to save", fileName);
     }
-    await vscode.commands.executeCommand(
-      "workbench.action.files.saveWithoutFormatting",
-    );
   };
 
   const files = new Set<string>();

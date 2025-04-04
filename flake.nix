@@ -19,6 +19,7 @@
           with pkgs;
           mkShellNoCC {
             buildInputs = [
+              bun
               nixfmt-rfc-style
               nodejs
             ];

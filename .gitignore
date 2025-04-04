@@ -1,5 +1,7 @@
 /.direnv/
 /.envrc
 /dist/
+/icon.png
+/icon.svg
 /save-constantly-*.vsix
 node_modules/

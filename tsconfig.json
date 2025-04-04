@@ -1,1 +1,10 @@
-{ "compilerOptions": { "lib": ["ES2018"], "noEmit": true, "target": "ES2015" } }
+{
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "jsxImportSource": "preact",
+    "lib": ["ES2018"],
+    "module": "Node16",
+    "noEmit": true,
+    "target": "ES2015"
+  }
+}
