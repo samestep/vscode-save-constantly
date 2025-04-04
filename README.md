@@ -3,7 +3,7 @@
 
 This is a [VS Code](https://code.visualstudio.com/) extension that lets you toggle documents to save on every change.
 
-[![video](media/video.gif)](media/video.mov)
+![video](media/video.gif)
 
 ## Usage
 
