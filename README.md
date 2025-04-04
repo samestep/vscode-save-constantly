@@ -1,4 +1,5 @@
-# Save Constantly (VS Code)
+<div align="center"><img height="128" src="icon.png" /></div>
+<h1 align="center">Save Constantly <img alt="VS Code Marketplace version" src="https://img.shields.io/vscode-marketplace/v/samestep.save-constantly?label=VS%20Code%20Marketplace"></h1>
 
 This is a [VS Code](https://code.visualstudio.com/) extension that lets you toggle documents to save on every change.
 
