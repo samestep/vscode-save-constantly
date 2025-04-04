@@ -59,7 +59,9 @@
     "png": "resvg-js --fit-width 256 icon.svg icon.png",
     "js": "esbuild src/extension.ts --bundle --format=cjs --platform=node --external:vscode --outdir=dist",
     "vsix": "vsce package",
-    "build": "bun run svg && bun run png && bun run js && bun run vsix"
+    "vscode:prepublish": "bun run svg && bun run png && bun run js",
+    "build": "bun run vscode:prepublish && bun run vsix",
+    "publish": "vsce publish"
   },
   "prettier": {
     "plugins": [
